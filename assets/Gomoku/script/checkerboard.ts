@@ -41,11 +41,16 @@ export default class checkerboard extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.screen();
         checkerboard.Graphics = this.node.getComponent(cc.Graphics);
         checkerboard.canvasHeight = this.node.parent.height;
         checkerboard.canvasWidth = this.node.parent.width;
+        cc.log(checkerboard.canvasHeight);
+        cc.log(checkerboard.canvasWidth);
         checkerboard.boardHeight = this.node.height;
         checkerboard.boardWidth = this.node.width;
+        cc.log(checkerboard.boardHeight);
+        cc.log(checkerboard.boardWidth);
         this.putColor(checkerboard.Graphics,checkerboard.canvasWidth);
         this.initboard(checkerboard.Graphics,checkerboard.boardHeight,checkerboard.boardWidth);
         this.initTwoArray(checkerboard.downChess,11,11);
@@ -66,6 +71,16 @@ export default class checkerboard extends cc.Component {
             cc.log(this.getLocation(event.getLocation()))
             this.downChess(checkerboard.Graphics,event.getLocation(),checkerboard.color);
         });
+    }
+    
+    screen(){
+        let winsize = cc.winSize;
+        cc.log(winsize);
+        if(winsize.width<=winsize.height){
+            this.node.height = this.node.width = Math.ceil(winsize.width) - 70;
+        }else{
+            this.node.height = this.node.width = Math.ceil(winsize.height) - 70;
+        }
     }
 
     initTwoArray(arr:Array<Array<number>>,x:number,y:number){//定义二维数组，并初始化值为0
