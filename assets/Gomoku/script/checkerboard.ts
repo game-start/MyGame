@@ -24,13 +24,13 @@ enum tupleScoreTable{
 
 @ccclass
 export default class checkerboard extends cc.Component {
-
+    static instance:checkerboard = null;
     static Graphics:cc.Graphics = null;
     static canvasHeight:number = 0;
     static canvasWidth:number = 0;
     static boardHeight:number = 0;
     static boardWidth:number = 0;
-    static color:string = "black";
+    static color:string;
     static downChess:Array<Array<number>> = new Array();
     static score:Array<Array<number>> = new Array();
     winArray:Array<Array<Array<boolean>>> = new Array();
@@ -41,7 +41,9 @@ export default class checkerboard extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        checkerboard.instance = this;
         this.screen();
+        checkerboard.color = "black";
         checkerboard.Graphics = this.node.getComponent(cc.Graphics);
         checkerboard.canvasHeight = this.node.parent.height;
         checkerboard.canvasWidth = this.node.parent.width;
@@ -165,7 +167,7 @@ export default class checkerboard extends cc.Component {
         return cc.v2(x,y);
     }
 
-    private changeArrayToNode(location:cc.Vec2){//将落子在数组中的位置转换成在节点中的坐标(绘制棋子)
+    public changeArrayToNode(location:cc.Vec2){//将落子在数组中的位置转换成在节点中的坐标(绘制棋子)
         let x = (location.x - 5)*(checkerboard.boardWidth/10);
         let y = (location.y - 5)*(checkerboard.boardHeight/10);
         return cc.v2(x,y);
@@ -197,22 +199,24 @@ export default class checkerboard extends cc.Component {
         let newNodeLocation = this.getLocation(Location);
         cc.log(newNodeLocation);
         let arrLocation = this.changeNodeToArray(newNodeLocation);
-        // let x = arrLocation.x;
-        // let y = arrLocation.y;
+        let x = arrLocation.x;
+        let y = arrLocation.y;
         // if(checkerboard.downChess[x][y] === 0){
         //     this.changeChessArray(x,y,Color);
         //     this.chess(Graphics,newNodeLocation,Color);
         //     this.changeColor(Color);
         //     this.win(Color,x,y);
         //}
-        this.addChess(arrLocation,newNodeLocation,Graphics,Color)
-        this.putScore(checkerboard.color);
-        let aiArrPosition = this.getBestPosition();
-        let aiNodeLocation = this.changeArrayToNode(aiArrPosition);
-        this.addChess(aiArrPosition,aiNodeLocation,Graphics,checkerboard.color);
+        if(checkerboard.downChess[x][y] === 0){
+            this.addChess(arrLocation,newNodeLocation,Graphics,Color)
+            this.putScore(checkerboard.color);
+            let aiArrPosition = this.getBestPosition();
+            let aiNodeLocation = this.changeArrayToNode(aiArrPosition);
+            this.addChess(aiArrPosition,aiNodeLocation,Graphics,checkerboard.color);
+        }
     }
 
-    private addChess(arrLocation:cc.Vec2,NodeLocation:cc.Vec2,Graphics:cc.Graphics,Color:string){
+    public addChess(arrLocation:cc.Vec2,NodeLocation:cc.Vec2,Graphics:cc.Graphics,Color:string){
         let x = arrLocation.x;
         let y = arrLocation.y;
         if(checkerboard.downChess[x][y] === 0){
@@ -318,7 +322,7 @@ export default class checkerboard extends cc.Component {
         checkerboard.score[i][j] = score;
     }
 
-    getBestPosition():cc.Vec2{
+    private getBestPosition():cc.Vec2{
         let score =0;
         let position = new cc.Vec2();
         for(let i=0;i<11;i++){
@@ -330,6 +334,13 @@ export default class checkerboard extends cc.Component {
             }
         }
         //checkerboard.score[position.x][position.y] = 0;
+        return position;
+    }
+
+    public getRandomPosition():cc.Vec2{
+        let x = 1 - Math.floor(3*Math.random());
+        let y = 1 - Math.floor(3*Math.random());
+        let position = cc.v2(x+5,y+5);
         return position;
     }
     
