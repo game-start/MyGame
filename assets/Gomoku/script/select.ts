@@ -18,23 +18,43 @@ export default class select extends cc.Component {
     
     @property(checkerboard)
     checkerboard:checkerboard = null;
+
+    canAddChess = false;
+
+    okCount = 0;
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
 
     start () {
-
+        cc.log(cc.find("white",this.node));
     }
 
-    // update (dt) {}
-    public selectBlack():void{
-        this.node.active = false;  
-    }
+    //update (dt) {}
 
-    public selectWhite():void{
-        this.node.active = false;
+    onDisable(){
         let aiArrPosition = checkerboard.instance.getRandomPosition();
         let aiNodeLocation = checkerboard.instance.changeArrayToNode(aiArrPosition);
         checkerboard.instance.addChess(aiArrPosition,aiNodeLocation,checkerboard.Graphics,checkerboard.color);
+    }
+
+    public selectBlack():void{
+        this.toSmall();
+        //this.node.active = false;  
+    }
+
+    public selectWhite():void{
+        //this.node.active = false;
+        checkerboard.instance.canDown = false;
+        //this.canAddChess = true;
+        this.toSmall();
+        // let aiArrPosition = checkerboard.instance.getRandomPosition();
+        // let aiNodeLocation = checkerboard.instance.changeArrayToNode(aiArrPosition);
+        // checkerboard.instance.addChess(aiArrPosition,aiNodeLocation,checkerboard.Graphics,checkerboard.color);
+    }
+
+    private toSmall():void{
+        let children:Array<cc.Node> = this.node.children;
+        children.forEach((child)=>{cc.tween(child).to(1,{scale:0.1}).call(()=>{this.node.active = false}).start()});
     }
 }

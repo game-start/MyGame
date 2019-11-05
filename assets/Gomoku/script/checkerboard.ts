@@ -37,10 +37,12 @@ export default class checkerboard extends cc.Component {
     count:number = 0;
     blackWin:Array<number> = new Array();
     whiteWin:Array<number> = new Array();
+    canDown:boolean = true;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        cc.log(this.canDown);
         checkerboard.instance = this;
         this.screen();
         checkerboard.color = "black";
@@ -207,19 +209,22 @@ export default class checkerboard extends cc.Component {
         //     this.changeColor(Color);
         //     this.win(Color,x,y);
         //}
-        if(checkerboard.downChess[x][y] === 0){
+        if(checkerboard.downChess[x][y] === 0&&this.canDown){
             this.addChess(arrLocation,newNodeLocation,Graphics,Color)
             this.putScore(checkerboard.color);
             let aiArrPosition = this.getBestPosition();
             let aiNodeLocation = this.changeArrayToNode(aiArrPosition);
-            this.addChess(aiArrPosition,aiNodeLocation,Graphics,checkerboard.color);
+            //let add = this.addChess;
+            this.scheduleOnce(()=>{this.addChess(aiArrPosition,aiNodeLocation,Graphics,checkerboard.color)},0.1);
         }
     }
 
-    public addChess(arrLocation:cc.Vec2,NodeLocation:cc.Vec2,Graphics:cc.Graphics,Color:string){
+    public addChess(arrLocation:cc.Vec2,NodeLocation:cc.Vec2,Graphics:cc.Graphics,Color:string):any{
         let x = arrLocation.x;
         let y = arrLocation.y;
+        cc.log(this);
         if(checkerboard.downChess[x][y] === 0){
+            this.canDown = !this.canDown;
             this.changeChessArray(x,y,Color);
             this.chess(Graphics,NodeLocation,Color);
             this.changeColor(Color);
