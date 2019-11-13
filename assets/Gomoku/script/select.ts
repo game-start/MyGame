@@ -33,6 +33,7 @@ export default class select extends cc.Component {
     //update (dt) {}
 
     onDisable(){
+        if(checkerboard.instance.canDown) return;
         let aiArrPosition = checkerboard.instance.getRandomPosition();
         let aiNodeLocation = checkerboard.instance.changeArrayToNode(aiArrPosition);
         checkerboard.instance.addChess(aiArrPosition,aiNodeLocation,checkerboard.Graphics,checkerboard.color);
