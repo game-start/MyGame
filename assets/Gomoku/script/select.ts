@@ -19,6 +19,7 @@ export default class select extends cc.Component {
     @property(checkerboard)
     checkerboard:checkerboard = null;
 
+
     canAddChess = false;
 
     okCount = 0;
