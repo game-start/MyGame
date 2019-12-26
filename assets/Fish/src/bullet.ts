@@ -4,7 +4,7 @@ const {ccclass, property} = cc._decorator;
 import pools from "./model/pools";
 
 @ccclass
-export default class bulletCtl extends cc.Component {
+export default class bullet extends cc.Component {
 
     dir:cc.Vec2;
     speed:number;

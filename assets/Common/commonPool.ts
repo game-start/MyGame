@@ -21,11 +21,9 @@ export default class commonPool{
     public get(){
         if(this.pool.size()>0){
             let item:cc.Node = this.pool.get();
-            cc.log("1")
             return item;
         }else{
             let item:cc.Node = cc.instantiate(this.curPrefab);
-            cc.log("2");
             return item;
         }
     }

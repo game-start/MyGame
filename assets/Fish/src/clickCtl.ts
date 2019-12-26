@@ -1,10 +1,10 @@
 
 
 const {ccclass, property} = cc._decorator;
-import convert from "../../Common/convert";
+import convert from "../../Common/convertPoint";
 import player from "./model/player";
-import commonPool from "../../Common/commonPool"
-import pools from "./model/pools"
+import commonPool from "../../Common/commonPool";
+import pools from "./model/pools";
 
 @ccclass
 export default class clickCtl extends cc.Component {
@@ -58,7 +58,7 @@ export default class clickCtl extends cc.Component {
             let nodePositon = cc.find("launch",this.gun).position;
             bullet.position = convert.nodeToNode(nodePositon,this.gun,this.bulletArea);
             bullet.rotation = rotation;
-            bullet.getComponent("bulletCtl").init(dir,1);
+            bullet.getComponent("bullet").init(dir,1);
         });
         player.getIns().barrel.runAction(cc.sequence(action1,action2,action3));
     }

@@ -1,4 +1,4 @@
-export default class convert{
+export default class convertPoint{
     public static worldToNode(position:cc.Vec2,node:cc.Node):cc.Vec2{
         let nodePosition:cc.Vec2 = null;
         nodePosition = node.convertToNodeSpaceAR(position);

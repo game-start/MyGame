@@ -1838,7 +1838,7 @@ declare namespace cc {
 		@param props {scale: 2, position: cc.v3(100, 100, 100)}
 		@param opts opts 
 		*/
-		to(duration: number, props: any, opts?: {progress: Function; easing: Function|string; }): Tween;		
+		to(duration: number, props: any, opts: {progress: Function; easing: Function|string; }): Tween;		
 		/**
 		!#en
 		Add an action which calculate with relative value
@@ -1848,7 +1848,7 @@ declare namespace cc {
 		@param props {scale: 2, position: cc.v3(100, 100, 100)}
 		@param opts opts 
 		*/
-		by(duration: number, props: any, opts?: {progress: Function; easing: Function|string; }): Tween;		
+		by(duration: number, props: any, opts: {progress: Function; easing: Function|string; }): Tween;		
 		/**
 		!#en
 		Directly set target properties
@@ -1943,9 +1943,7 @@ declare namespace cc {
 		@param target the target to animate 
 		*/
 		tween(target?: any): Tween;	
-	}
-	
-	export  function tween(target?: any): Tween;
+	}	
 	/** !#en Class for animation data handling.
 	!#zh 动画剪辑，用于存储动画数据。 */
 	export class AnimationClip extends Asset {		
