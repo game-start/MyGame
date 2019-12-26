@@ -1,6 +1,8 @@
 
 const {ccclass, property} = cc._decorator;
 import status from "./model/gameStatus"
+import pools from "./model/pools";
+
 @ccclass
 export default class fish extends cc.Component {
 
@@ -27,8 +29,8 @@ export default class fish extends cc.Component {
         }
         let radian = this.node.rotation*Math.PI/180;
         this.node.position = this.node.position.add(cc.v2(Math.sin(radian),Math.cos(radian)));
-        cc.log(this.node.rotation);
-        cc.log(cc.v2(Math.sin(radian),Math.cos(radian)));
+        // cc.log(this.node.rotation);
+        // cc.log(cc.v2(Math.sin(radian),Math.cos(radian)));
     }
 
     private initFish():void{
@@ -49,5 +51,14 @@ export default class fish extends cc.Component {
         }
     }
 
+    onCollisionEnter(other:cc.BoxCollider,self:cc.BoxCollider){
+        this.node.getChildByName("bg").color = new cc.Color(255,0,0,150);
+        setTimeout(()=>this.node.getChildByName("bg").color = new cc.Color(255,255,255,0),0.3);
+        this.hp--;
+        if(this.hp<=0){
+            pools.fishPool.put(this.node);
+        }
+    }
 
+    
 }

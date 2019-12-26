@@ -22,7 +22,7 @@ export default class bullet extends cc.Component {
 
     public init(dir:cc.Vec2,speed:number){
         this.dir = dir;
-        this.speed = speed;
+        this.speed = 5;
     }
 
     private ruin(){
@@ -31,5 +31,9 @@ export default class bullet extends cc.Component {
         }else{
             this.node.destroy();
         }
+    }
+
+    onCollisionEnter(other:cc.BoxCollider,self:cc.BoxCollider){
+        pools.bulletPool.put(self.node);
     }
 }

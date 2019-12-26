@@ -22,6 +22,7 @@ export default class clickCtl extends cc.Component {
     bulletArea:cc.Node = null;
 
     onLoad () {
+        cc.director.getCollisionManager().enabled = true;
         pools.bulletPool = new commonPool(10,this.bullet);
         let barrel:cc.Node = cc.find("barrel",this.gun);
         player.getIns().init(barrel);
