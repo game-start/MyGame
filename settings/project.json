@@ -7,10 +7,18 @@
     [
       false,
       false,
+      true,
       true
     ],
     [
       false,
+      true,
+      false,
+      true
+    ],
+    [
+      false,
+      true,
       true,
       false
     ]
@@ -33,7 +41,8 @@
   "group-list": [
     "default",
     "bullet",
-    "fish"
+    "fish",
+    "border"
   ],
   "last-module-event-record-time": 0,
   "simulator-orientation": false,

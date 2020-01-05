@@ -4,8 +4,12 @@ export default class commonPool{
 
     private maxNumber:number;
 
-    constructor(number:number,type:cc.Prefab){
-        this.pool = new cc.NodePool();
+    constructor(number:number,type:cc.Prefab,script?:string){
+        if(script){
+            this.pool = new cc.NodePool(script);
+        }else{
+            this.pool = new cc.NodePool();
+        }
         this.curPrefab = type;
         this.maxNumber = number + 20;
         this.init(number,type);
