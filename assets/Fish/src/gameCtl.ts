@@ -49,8 +49,6 @@ export default class gameCtl extends cc.Component {
         status.height = cc.winSize.height;
         this.initPools();
         this.initPlayerInfo();
-        //this.mask.children[0]["tag"] = 0;
-        cc.log(this.mask.children[0]);
     }
 
     onEnable(){
@@ -99,6 +97,7 @@ export default class gameCtl extends cc.Component {
         status.fishNum++;
         let fish = pools.fishPool.get();
         fish.parent = this.fishArea;
+        //fish.getComponent("fish").initFish(3*status.stage,status.stage);
         cc.log(fish);
         if(this.positionOrder>2){
             this.positionOrder = 0;
@@ -107,30 +106,30 @@ export default class gameCtl extends cc.Component {
             case 0:
                 fish.x = -status.width/2;
                 fish.y = 0.8*(Math.random()-0.5)*status.height;
-                //fish.rotation = 90;
-                fish.runAction(cc.rotateTo(0,90));
-                fish.rotationX = 90;
-                fish.rotationY = 90;
+                fish.rotation = 90;
+                //fish.runAction(cc.rotateTo(0,90,90));
+                // fish.rotationX = 90;
+                // fish.rotationY = 90;
                 fish.scaleX = 1;
                 cc.log(fish);
                 break;
             case 1:
                 fish.x = 0.8*(Math.random()-0.5)*status.width;
                 fish.y = status.height/2;
-                //fish.rotation = 180;
-                fish.runAction(cc.rotateTo(0,180));
-                fish.rotationX = 180;
-                fish.rotationY = 180;
+                fish.rotation = 180;
+                //fish.runAction(cc.rotateTo(0,180,180));
+                // fish.rotationX = 180;
+                // fish.rotationY = 180;
                 fish.scaleX = 1;
                 cc.log(fish);
                 break;
             case 2:
                 fish.x = status.width/2;
                 fish.y = 0.8*(Math.random()-0.5)*status.height;
-                //fish.rotation = -90;
-                fish.runAction(cc.rotateTo(0,-90));
-                fish.rotationX = -90;
-                fish.rotationY = -90;
+                fish.rotation = -90;
+                //fish.runAction(cc.rotateTo(0,-90,-90));
+                // fish.rotationX = -90;
+                // fish.rotationY = -90;
                 fish.scaleX = -1;
                 cc.log(fish);
                 break;
@@ -192,7 +191,12 @@ export default class gameCtl extends cc.Component {
         // this.mask.children.splice(1).forEach(item=>pools.bulletPool.put(item));
         // this.mask.children[0].y = 0;
     }
-
+    
+    /**
+     * @function 删除数组元素要倒序遍历
+     * @param arr 
+     * @param pool 
+     */
     private putAllToPool(arr:Array<cc.Node>,pool:commonPool){
         for(let i = arr.length-1;i>=0;i--){
             pool.put(arr[i]);

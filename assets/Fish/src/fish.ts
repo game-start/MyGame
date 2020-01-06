@@ -21,7 +21,7 @@ export default class fish extends cc.Component {
 
     onLoad () {
         this.goldEndPosition = cc.find("goldFrame",cc.director.getScene().getChildByName("Canvas")).position;
-        this.initFish() ;
+        this.initFish(status.stage,status.stage) ;
         this.scheduleOnce(()=>this.canTurn = true,3);
     }
 
@@ -38,17 +38,17 @@ export default class fish extends cc.Component {
             }
         }
         let radian = this.node.rotation*Math.PI/180;
-        this.node.position = this.node.position.add(cc.v2(Math.sin(radian),Math.cos(radian)));
+        this.node.position = this.node.position.add(cc.v2(Math.sin(radian),Math.cos(radian)).mul(this.speed));
         // cc.log(this.node.rotation);
         // cc.log(cc.v2(Math.sin(radian),Math.cos(radian)));
     }
 
-    private initFish():void{
+    public initFish(hp:number,speed:number):void{
         this.timer = 0;
         this.canTurn = false;
         this.limitTurn = 0;
-        this.hp = status.stage;
-        this.speed = status.stage;
+        this.hp = hp;
+        this.speed = speed;
     }
 
     private rodomTurn(){
@@ -76,6 +76,7 @@ export default class fish extends cc.Component {
         status.fishNum--;
         let dropArea = cc.find("dropArea",cc.director.getScene().getChildByName("Canvas"));
         let diePosition = this.node.position;
+        //this.node.parent = null;
         pools.fishPool.put(this.node);
         let gold = pools.goldPool.get();
         gold.parent = dropArea;
@@ -87,12 +88,13 @@ export default class fish extends cc.Component {
     }
 
     reuse(){
-        this.initFish();
+        this.initFish(status.stage,status.stage);
         this.scheduleOnce(()=>this.canTurn = true,3);
     }
 
     unuse(){
         this.unscheduleAllCallbacks();
+        this.node.stopAllActions();
     }
 
 
