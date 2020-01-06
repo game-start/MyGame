@@ -12,16 +12,17 @@ export default class fish extends cc.Component {
     limitTurn:number = 0;
     hp:number;
     speed:number;
+    dropEvent:Function;
 
     shotTimer:number;
 
-    goldEndPosition:cc.Vec2 = null;
+    //goldEndPosition:cc.Vec2 = null;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.goldEndPosition = cc.find("goldFrame",cc.director.getScene().getChildByName("Canvas")).position;
-        this.initFish(status.stage,status.stage) ;
+        //this.goldEndPosition = cc.find("goldFrame",cc.director.getScene().getChildByName("Canvas")).position;
+        //this.initFish(2*status.stage,status.stage) ;
         this.scheduleOnce(()=>this.canTurn = true,3);
     }
 
@@ -43,12 +44,13 @@ export default class fish extends cc.Component {
         // cc.log(cc.v2(Math.sin(radian),Math.cos(radian)));
     }
 
-    public initFish(hp:number,speed:number):void{
+    public initFish(hp:number,speed:number,dropEvent:Function):void{
         this.timer = 0;
         this.canTurn = false;
         this.limitTurn = 0;
         this.hp = hp;
         this.speed = speed;
+        this.dropEvent = dropEvent;
     }
 
     private rodomTurn(){
@@ -74,21 +76,22 @@ export default class fish extends cc.Component {
 
     private fishDie(){
         status.fishNum--;
-        let dropArea = cc.find("dropArea",cc.director.getScene().getChildByName("Canvas"));
+        //let dropArea = cc.find("dropArea",cc.director.getScene().getChildByName("Canvas"));
         let diePosition = this.node.position;
         //this.node.parent = null;
         pools.fishPool.put(this.node);
-        let gold = pools.goldPool.get();
-        gold.parent = dropArea;
-        gold.position = diePosition;
-        let action1 = cc.moveTo(1,this.goldEndPosition);
-        let action2 = cc.scaleTo(1,0);
-        let action3 = cc.callFunc(()=>{pools.goldPool.put(gold);player.addGold(1)});
-        gold.runAction(cc.sequence(cc.spawn(action1,action2),action3));
+        this.dropEvent(diePosition);
+        // let gold = pools.goldPool.get();
+        // gold.parent = dropArea;
+        // gold.position = diePosition;
+        // let action1 = cc.moveTo(1,this.goldEndPosition);
+        // let action2 = cc.scaleTo(1,0);
+        // let action3 = cc.callFunc(()=>{pools.goldPool.put(gold);player.addGold(1)});
+        // gold.runAction(cc.sequence(cc.spawn(action1,action2),action3));
     }
 
     reuse(){
-        this.initFish(status.stage,status.stage);
+        //this.initFish(status.stage,status.stage);
         this.scheduleOnce(()=>this.canTurn = true,3);
     }
 

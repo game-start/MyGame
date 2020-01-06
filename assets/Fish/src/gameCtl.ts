@@ -42,11 +42,13 @@ export default class gameCtl extends cc.Component {
     gun:cc.Node = null;
 
     positionOrder:number = 0;
+    goldEndPosition:cc.Vec2;
     
     onLoad () {
         cc.director.getCollisionManager().enabled = true;
         status.width = cc.winSize.width;
         status.height = cc.winSize.height;
+        this.goldEndPosition = cc.find("goldFrame",cc.director.getScene().getChildByName("Canvas")).position;
         this.initPools();
         this.initPlayerInfo();
     }
@@ -97,7 +99,7 @@ export default class gameCtl extends cc.Component {
         status.fishNum++;
         let fish = pools.fishPool.get();
         fish.parent = this.fishArea;
-        //fish.getComponent("fish").initFish(3*status.stage,status.stage);
+        fish.getComponent("fish").initFish(status.stage,status.stage,this.dropGold.bind(this));
         cc.log(fish);
         if(this.positionOrder>2){
             this.positionOrder = 0;
@@ -107,9 +109,6 @@ export default class gameCtl extends cc.Component {
                 fish.x = -status.width/2;
                 fish.y = 0.8*(Math.random()-0.5)*status.height;
                 fish.rotation = 90;
-                //fish.runAction(cc.rotateTo(0,90,90));
-                // fish.rotationX = 90;
-                // fish.rotationY = 90;
                 fish.scaleX = 1;
                 cc.log(fish);
                 break;
@@ -117,9 +116,6 @@ export default class gameCtl extends cc.Component {
                 fish.x = 0.8*(Math.random()-0.5)*status.width;
                 fish.y = status.height/2;
                 fish.rotation = 180;
-                //fish.runAction(cc.rotateTo(0,180,180));
-                // fish.rotationX = 180;
-                // fish.rotationY = 180;
                 fish.scaleX = 1;
                 cc.log(fish);
                 break;
@@ -127,15 +123,22 @@ export default class gameCtl extends cc.Component {
                 fish.x = status.width/2;
                 fish.y = 0.8*(Math.random()-0.5)*status.height;
                 fish.rotation = -90;
-                //fish.runAction(cc.rotateTo(0,-90,-90));
-                // fish.rotationX = -90;
-                // fish.rotationY = -90;
                 fish.scaleX = -1;
                 cc.log(fish);
                 break;
         }
         this.positionOrder++;
         cc.log(fish);
+    }
+
+    dropGold(position:cc.Vec2){
+        let gold = pools.goldPool.get();
+        gold.parent = this.dropArea;
+        gold.position = position;
+        let action1 = cc.moveTo(1,this.goldEndPosition);
+        let action2 = cc.scaleTo(1,0);
+        let action3 = cc.callFunc(()=>{pools.goldPool.put(gold);player.addGold(1)});
+        gold.runAction(cc.sequence(cc.spawn(action1,action2),action3));
     }
     
     /**
