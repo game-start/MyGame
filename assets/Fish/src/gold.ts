@@ -28,4 +28,8 @@ export default class gold extends cc.Component {
         // let action2 = cc.scaleTo(1,0);
         // this.node.runAction(cc.spawn(action1,action2));
     }
+
+    unuse(){
+        this.node.stopAllActions();
+    }
 }

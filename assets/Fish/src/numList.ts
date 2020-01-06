@@ -8,6 +8,7 @@ import pools from "./model/pools";
 export default class numList extends cc.Component {
 
     tag:number = 0;
+    num:number = 0;
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
@@ -21,6 +22,7 @@ export default class numList extends cc.Component {
 
     update (dt) {
         if(this.node.y<= -this.node.height){
+            
             this.node.y = 0;
             let parent = this.node.parent;
             let nextList = parent.children[this.tag+1];
@@ -36,5 +38,9 @@ export default class numList extends cc.Component {
     reuse(){
         this.node.x = 0
         this.node.y = 0;
+    }
+
+    unuse(){
+        this.node.stopAllActions();
     }
 }

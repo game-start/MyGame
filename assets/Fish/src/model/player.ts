@@ -21,7 +21,7 @@ export default class player{
     public static addGold(num:number,tag:number = 0){
         this.gold += num;
         let baseOffset = this.goldMask.children[0].height/10;
-        this.goldMask.children[tag].runAction(cc.moveBy(0.5,0,-baseOffset*num));
+        this.goldMask.children[tag].runAction(cc.sequence(cc.moveBy(0.5,0,-baseOffset*num),cc.callFunc(()=>this.goldMask.children[tag].y=Math.round(this.goldMask.children[tag].y))));
     }
 
 }
