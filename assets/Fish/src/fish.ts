@@ -3,6 +3,7 @@ const {ccclass, property} = cc._decorator;
 import status from "./model/gameStatus";
 import pools from "./model/pools";
 import player from "./model/player";
+import { spawn } from "child_process";
 
 @ccclass
 export default class fish extends cc.Component {
@@ -15,6 +16,9 @@ export default class fish extends cc.Component {
     dropEvent:Function;
 
     shotTimer:number;
+    bgNode:cc.Node;
+    clipArr:Array<cc.AnimationClip> = [];
+    isElite:boolean = false;
 
     //goldEndPosition:cc.Vec2 = null;
 
@@ -23,11 +27,18 @@ export default class fish extends cc.Component {
     onLoad () {
         //this.goldEndPosition = cc.find("goldFrame",cc.director.getScene().getChildByName("Canvas")).position;
         //this.initFish(2*status.stage,status.stage) ;
-        this.scheduleOnce(()=>this.canTurn = true,3);
+        // this.bgNode = cc.find("bg",this.node);
+        // this.clipArr = this.bgNode.getComponent(cc.Animation).getClips();
+        this.scheduleOnce(()=>this.canTurn = true,2);
+    }
+
+    onEnable (){
+        this.scheduleOnce(()=>this.canTurn = true,2);
     }
 
     start () {
-
+        // this.bgNode = cc.find("bg",this.node);
+        // this.clipArr = this.bgNode.getComponent(cc.Animation).getClips();
     }
 
     update (dt) {
@@ -75,11 +86,22 @@ export default class fish extends cc.Component {
     }
 
     private fishDie(){
-        status.fishNum--;
+        //status.fishNum--;
         //let dropArea = cc.find("dropArea",cc.director.getScene().getChildByName("Canvas"));
         let diePosition = this.node.position;
         //this.node.parent = null;
-        pools.fishPool.put(this.node);
+        if(!this.isElite){
+            pools.fishPool.put(this.node);
+            status.fishNum--;
+            if(!status.curBuff){
+                status.killNum++;
+            }
+        }else{
+            this.node.active = false;
+            this.node.parent = null;
+            status.curBuff = 0;
+             
+        }
         this.dropEvent(diePosition);
         // let gold = pools.goldPool.get();
         // gold.parent = dropArea;
@@ -92,24 +114,31 @@ export default class fish extends cc.Component {
 
     reuse(){
         //this.initFish(status.stage,status.stage);
+        if(!this.bgNode||!this.clipArr){
+            this.bgNode = cc.find("bg",this.node);
+            this.clipArr = this.bgNode.getComponent(cc.Animation).getClips();
+        }
+        this.bgNode.getComponent(cc.Animation).play(this.clipArr[0].name);
         this.scheduleOnce(()=>this.canTurn = true,3);
     }
 
     unuse(){
         this.unscheduleAllCallbacks();
         this.node.stopAllActions();
+        if(this.bgNode&&this.bgNode.getComponent(cc.Animation)){
+            this.bgNode.getComponent(cc.Animation).stop(this.clipArr[0].name);
+        }
     }
 
 
     onCollisionEnter(other:cc.BoxCollider,self:cc.BoxCollider){
         if(other.node.group === "bullet"){
-            this.node.getChildByName("bg").color = new cc.Color(255,0,0,150);
-            clearTimeout(this.shotTimer);
-            this.shotTimer = setTimeout(()=>this.node.getChildByName("bg").color = new cc.Color(255,255,255,0),0.3);
+            this.node.getChildByName("bg").color = new cc.Color(255,0,0,0);
+            this.scheduleOnce(()=>this.node.getChildByName("bg").color = new cc.Color(255,255,255,0),0.1);
             this.hp--;
             if(this.hp<=0){
                 //pools.fishPool.put(this.node);
-                this.fishDie();
+                this.scheduleOnce(this.fishDie,0.1);
             }
         }
         else if(other.node.group === "border"&&this.canTurn === true){

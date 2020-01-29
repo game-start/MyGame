@@ -30,6 +30,6 @@ export default class gold extends cc.Component {
     }
 
     unuse(){
-        this.node.stopAllActions();
+        // this.node.stopAllActions();
     }
 }

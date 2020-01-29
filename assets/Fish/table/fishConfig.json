@@ -1,0 +1,9 @@
+[
+    {   
+        "number":"1",
+        "name":"急速鱼",
+        "hp":3,
+        "speed":2,
+        "collisionBox":{"w":20,"h":58}
+    }
+]
