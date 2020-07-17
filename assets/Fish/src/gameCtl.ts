@@ -96,6 +96,9 @@ export default class gameCtl extends cc.Component {
     @property({type:cc.Label,tooltip:"顶部精英鱼文字"})
     eliteFishLabel:cc.Label = null;
 
+    @property({type:cc.Label,tooltip:"顶部子弹伤害文字"})
+    bulletHurt:cc.Label = null;
+
     shopTimer:number = 1;
     shopTotalTime:number = 0;
     
@@ -674,7 +677,7 @@ export default class gameCtl extends cc.Component {
      */
     restart(): void {
         this.gun.rotation = 0;
-        if(this.eliteFish){
+        if(this.eliteFish.active === true){
             this.eliteFish.active = false;
             this.eliteFish.parent = null;
             this.removeBuff();
@@ -985,6 +988,7 @@ export default class gameCtl extends cc.Component {
     punctureShoot(){
         player.isPuncture = true;
         player.bulletHurt ++;
+        this.bulletHurt.string = `子弹伤害: ${player.bulletHurt}`;
     }
     
     /**
@@ -993,6 +997,7 @@ export default class gameCtl extends cc.Component {
     punctureShootEnd(){
         player.isPuncture = false;
         player.bulletHurt --;
+        this.bulletHurt.string = `子弹伤害: ${player.bulletHurt}`;
     }
     
     /**
@@ -1014,6 +1019,7 @@ export default class gameCtl extends cc.Component {
      */
     strongShoot(){
         player.bulletHurt += 2;
+        this.bulletHurt.string = `子弹伤害: ${player.bulletHurt}`;
     }
     
     /**
@@ -1021,6 +1027,7 @@ export default class gameCtl extends cc.Component {
      */
     strongShootEnd(){
         player.bulletHurt -= 2;
+        this.bulletHurt.string = `子弹伤害: ${player.bulletHurt}`;
     }
     
     /**
