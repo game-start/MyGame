@@ -1,0 +1,105 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "fish_2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.6666666666666666,
+  "sample": 15,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "82a00d74-f05b-498b-8530-c1018463ccd3"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "9c0f867c-c667-4012-9b76-e9563ab3242d"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "d414b5fc-9196-4839-9341-151c9879f9e1"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "eabf702b-8e6a-4f12-8ef3-0534b04ae0a7"
+            }
+          },
+          {
+            "frame": 0.26666666666666666,
+            "value": {
+              "__uuid__": "3e14077c-2308-428d-822b-75d91db7d960"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "65cc333d-3591-4cab-8cf8-ca647eb68de5"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "6ddde005-e68d-45f5-874d-c3fa88d53533"
+            }
+          },
+          {
+            "frame": 0.4666666666666667,
+            "value": {
+              "__uuid__": "a54bdcaa-ba7e-4116-b92e-96063da5d751"
+            }
+          },
+          {
+            "frame": 0.5333333333333333,
+            "value": {
+              "__uuid__": "80be3aa8-9ee3-49d3-94e2-f061ce96eaf3"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "59314e5b-af22-4d1b-8119-d9a3d19a006a"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": [
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.06666666666666667,
+      "func": "",
+      "params": []
+    }
+  ]
+}

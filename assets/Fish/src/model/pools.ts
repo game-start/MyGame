@@ -4,6 +4,12 @@ export default class pools{
     static fishPool:commonPool;
     static goldPool:commonPool;
     static numListPool:commonPool;
+    static cdMaskPool:commonPool;
+    static infoPool:commonPool;
+    static tipsPool:commonPool;
+    static arrowPool:commonPool;
+    static textPool:commonPool;
+    static promptBoxPool:commonPool;
 }
 
 

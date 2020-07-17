@@ -1,0 +1,30 @@
+[
+    {
+        "number":0,
+        "name":"双重射击",
+        "price":15,
+        "cd":8,
+        "times":3
+    },
+    {
+        "number":1,
+        "name":"穿刺子弹",
+        "price":20,
+        "cd":8,
+        "times":3
+    },
+    {
+        "number":2,
+        "name":"弹簧子弹",
+        "price":10,
+        "cd":6,
+        "times":5
+    },
+    {
+        "number":3,
+        "name":"强力子弹",
+        "price":16,
+        "cd":8,
+        "times":5
+    }
+]

@@ -1,9 +1,11 @@
 
 const {ccclass, property} = cc._decorator;
-import status from "./model/gameStatus";
-import pools from "./model/pools";
-import player from "./model/player";
+import status from "../model/gameStatus";
+import pools from "../model/pools";
+import player from "../model/player";
 import { spawn } from "child_process";
+import convert from "../../../Common/convertPoint";
+import {Buff} from "../model/buffEnum"
 
 @ccclass
 export default class fish extends cc.Component {
@@ -11,14 +13,20 @@ export default class fish extends cc.Component {
     timer:number = 0;
     canTurn:boolean = false;
     limitTurn:number = 0;
+    maxHp:number;
     hp:number;
-    speed:number;
+    border:boolean;
+    unBorderSpeed:number;
+    borderSpeed:number = 0.5;//到达边界时减速，避免穿墙发生
     dropEvent:Function;
 
     shotTimer:number;
     bgNode:cc.Node;
     clipArr:Array<cc.AnimationClip> = [];
     isElite:boolean = false;
+
+    info:cc.Node = undefined;
+    
 
     //goldEndPosition:cc.Vec2 = null;
 
@@ -29,11 +37,15 @@ export default class fish extends cc.Component {
         //this.initFish(2*status.stage,status.stage) ;
         // this.bgNode = cc.find("bg",this.node);
         // this.clipArr = this.bgNode.getComponent(cc.Animation).getClips();
+        //console.log(/**鱼的onload */);
         this.scheduleOnce(()=>this.canTurn = true,2);
+
     }
 
     onEnable (){
-        this.scheduleOnce(()=>this.canTurn = true,2);
+        this.scheduleOnce(()=>this.canTurn = true,2);//因为精英鱼死亡不放回池中，只是将active设为false
+        // this.node.on(cc.Node.EventType.MOUSE_ENTER,(event:cc.Event.EventMouse)=>{this.showInfo(event.getLocation())},this);
+        // this.node.on(cc.Node.EventType.MOUSE_LEAVE,this.hideInfo,this);
     }
 
     start () {
@@ -50,17 +62,26 @@ export default class fish extends cc.Component {
             }
         }
         let radian = this.node.rotation*Math.PI/180;
-        this.node.position = this.node.position.add(cc.v2(Math.sin(radian),Math.cos(radian)).mul(this.speed));
+        if(!this.border){
+            this.node.position = this.node.position.add(cc.v2(Math.sin(radian),Math.cos(radian)).mul(this.unBorderSpeed));
+        }else{
+            this.node.position = this.node.position.add(cc.v2(Math.sin(radian),Math.cos(radian)).mul(this.borderSpeed));
+        }
         // cc.log(this.node.rotation);
         // cc.log(cc.v2(Math.sin(radian),Math.cos(radian)));
+        if(this.hp>this.maxHp){
+            this.hp = this.maxHp;
+        }
     }
 
-    public initFish(hp:number,speed:number,dropEvent:Function):void{
+    public initFish(maxHp:number,unBorderSpeed:number,dropEvent:Function):void{
         this.timer = 0;
         this.canTurn = false;
         this.limitTurn = 0;
-        this.hp = hp;
-        this.speed = speed;
+        this.maxHp = maxHp;
+        this.hp = maxHp;
+        this.unBorderSpeed = unBorderSpeed;
+        this.border = false;
         this.dropEvent = dropEvent;
     }
 
@@ -93,14 +114,19 @@ export default class fish extends cc.Component {
         if(!this.isElite){
             pools.fishPool.put(this.node);
             status.fishNum--;
+            cc.director.emit("updateSoldierFishLabel");
             if(!status.curBuff){
                 status.killNum++;
+            }else{
+                this.node.getComponent(Buff[status.curBuff]).enabled = false;
             }
         }else{
+            this.unuse();
             this.node.active = false;
             this.node.parent = null;
+            cc.director.emit("clearBuff");
             status.curBuff = 0;
-             
+            cc.director.emit("updateEliteFishLabel");                                                                                                                                                                       
         }
         this.dropEvent(diePosition);
         // let gold = pools.goldPool.get();
@@ -112,6 +138,10 @@ export default class fish extends cc.Component {
         // gold.runAction(cc.sequence(cc.spawn(action1,action2),action3));
     }
 
+    private boderTest(){
+
+    }
+
     reuse(){
         //this.initFish(status.stage,status.stage);
         if(!this.bgNode||!this.clipArr){
@@ -119,7 +149,7 @@ export default class fish extends cc.Component {
             this.clipArr = this.bgNode.getComponent(cc.Animation).getClips();
         }
         this.bgNode.getComponent(cc.Animation).play(this.clipArr[0].name);
-        this.scheduleOnce(()=>this.canTurn = true,3);
+        this.scheduleOnce(()=>this.canTurn = true,2);
     }
 
     unuse(){
@@ -135,7 +165,8 @@ export default class fish extends cc.Component {
         if(other.node.group === "bullet"){
             this.node.getChildByName("bg").color = new cc.Color(255,0,0,0);
             this.scheduleOnce(()=>this.node.getChildByName("bg").color = new cc.Color(255,255,255,0),0.1);
-            this.hp--;
+            let hurt = other.node.getComponent("bullet").hurt;
+            this.hp -= hurt;
             if(this.hp<=0){
                 //pools.fishPool.put(this.node);
                 this.scheduleOnce(this.fishDie,0.1);
@@ -143,17 +174,33 @@ export default class fish extends cc.Component {
         }
         else if(other.node.group === "border"&&this.canTurn === true){
             this.canTurn = false;
-            let action2 = cc.callFunc(()=>this.canTurn = true);
-            if(other.tag === 0){
-                this.canTurn = false;
-                let action1 = cc.rotateTo(0.5,180-self.node.rotation);
-                self.node.runAction(cc.sequence(action1,action2));
-            }else if(other.tag === 1){
-                 let action1 = cc.rotateTo(0.5,-self.node.rotation);
-                 self.node.runAction(cc.sequence(action1,action2));
-            }
+            this.border = true;
+            let action2 = cc.callFunc(()=>{this.canTurn = true;this.border = false});
+            let rotationArr = [0,-90,-180,90];
+            let action1 = cc.rotateTo(1,rotationArr[other.tag]);
+            self.node.runAction(cc.sequence(action1,action2));
+            // if(other.tag === 0){
+            //     //this.canTurn = false;
+            //     let action1 = cc.rotateTo(1,0);
+            //     self.node.runAction(cc.sequence(action1,action2));
+            // }else if(other.tag === 1){
+            //     let action1 = cc.rotateTo(1,90);
+            //     self.node.runAction(cc.sequence(action1,action2));
+            // }
         }
     }
 
+    // showInfo(position){
+    //     let info = pools.infoPool.get();
+    //     this.info = info;
+    //     cc.log("/**信息节点坐标**/");
+    //     cc.log(info);
+    //     cc.log("/*********/");
+    //     info.getComponent("info").updateContent("fish",position);
+    // }
+
+    // hideInfo(){
+    //     pools.infoPool.put(this.info);
+    // }
     
 }

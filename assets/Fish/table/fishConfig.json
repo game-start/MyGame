@@ -4,6 +4,15 @@
         "name":"急速鱼",
         "hp":3,
         "speed":2,
-        "collisionBox":{"w":20,"h":58}
+        "collisionBox":{"w":20,"h":58},
+        "text":"提供加速buff"
+    },
+    {
+        "number":"2",
+        "name":"加血鱼",
+        "hp":6,
+        "speed":1,
+        "collisionBox":{"w":57,"h":99},
+        "text":"提供加血buff"
     }
 ]
