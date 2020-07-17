@@ -630,16 +630,20 @@ export default class gameCtl extends cc.Component {
         let newRotation = rotation;
         if(player.barrel.length === 1){
             if(newRotation>45){
+                this.setTips("超出射击范围");
                 newRotation = 45;
             }
             if(newRotation<-45){
+                this.setTips("超出射击范围");
                 newRotation = -45;
             }
         }else if(player.barrel.length === 2){
             if(newRotation>25){
+                this.setTips("超出射击范围");
                 newRotation = 25;
             }
             if(newRotation<-25){
+                this.setTips("超出射击范围");
                 newRotation = -25;
             }
         }
