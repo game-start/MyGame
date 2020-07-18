@@ -142,6 +142,12 @@ export default class gameCtl extends cc.Component {
         cc.director.getCollisionManager().enabled = true;
         status.width = cc.winSize.width;
         status.height = cc.winSize.height;
+        if(status.height>status.width){
+            cc.view.setOrientation(cc.macro.ORIENTATION_LANDSCAPE);
+            let canvas = cc.find("Canvas");
+            canvas.getComponent(cc.Canvas).fitHeight = false;
+            canvas.getComponent(cc.Canvas).fitWidth = true;
+        }
         this.eliteFishData = this.fishJson.json;
         this.skillData = this.skillJson.json;
         this.goldEndPosition = cc.find("goldFrame", cc.director.getScene().getChildByName("Canvas")).position;
