@@ -687,7 +687,7 @@ export default class gameCtl extends cc.Component {
      */
     restart(): void {
         this.gun.rotation = 0;
-        if(this.eliteFish.active === true){
+        if(this.eliteFish&&this.eliteFish.active === true){
             this.eliteFish.active = false;
             this.eliteFish.parent = null;
             this.removeBuff();
