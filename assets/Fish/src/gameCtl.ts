@@ -174,12 +174,13 @@ export default class gameCtl extends cc.Component {
         cc.director.on("clearBuff", this.removeBuff, this);
         cc.director.on("updateSoldierFishLabel",this.updateSoldierFishLabel,this);
         cc.director.on("updateEliteFishLabel",this.updateEliteFishLabel,this);
-        this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_ENTER,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),1),this);
-        this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
-        this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_LEAVE,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
-        this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_ENTER,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),2),this);
-        this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
-        this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_LEAVE,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+        this.bindTopLabelEvent();
+        // this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_ENTER,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),1),this);
+        // this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
+        // this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_LEAVE,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+        // this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_ENTER,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),2),this);
+        // this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
+        // this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_LEAVE,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
     }
     onDisable() {
         this.unschedule(this.createSoldier);
@@ -225,6 +226,29 @@ export default class gameCtl extends cc.Component {
             this.refreshShop();
         }
         
+    }
+    
+    /**
+     * @function 给顶部文字绑定事件
+     */
+    bindTopLabelEvent(){
+        if(cc.sys.isMobile){
+            this.soldierFishLabel.node.on(cc.Node.EventType.TOUCH_START,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),1),this);
+            this.soldierFishLabel.node.on(cc.Node.EventType.TOUCH_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
+            this.soldierFishLabel.node.on(cc.Node.EventType.TOUCH_END,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+            this.soldierFishLabel.node.on(cc.Node.EventType.TOUCH_CANCEL,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+            this.eliteFishLabel.node.on(cc.Node.EventType.TOUCH_START,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),2),this);
+            this.eliteFishLabel.node.on(cc.Node.EventType.TOUCH_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
+            this.eliteFishLabel.node.on(cc.Node.EventType.TOUCH_END,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+            this.eliteFishLabel.node.on(cc.Node.EventType.TOUCH_CANCEL,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+        }else{
+            this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_ENTER,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),1),this);
+            this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
+            this.soldierFishLabel.node.on(cc.Node.EventType.MOUSE_LEAVE,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+            this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_ENTER,(event:cc.Event.EventMouse)=>this.showInfo(event.getLocation(),2),this);
+            this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_MOVE,(event:cc.Event.EventMouse)=>this.moveInfo(event.getLocation()),this);
+            this.eliteFishLabel.node.on(cc.Node.EventType.MOUSE_LEAVE,(event:cc.Event.EventMouse)=>this.hideInfo(),this);
+        }
     }
     
     /**
