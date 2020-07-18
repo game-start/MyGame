@@ -140,14 +140,17 @@ export default class gameCtl extends cc.Component {
 
     onLoad() {
         cc.director.getCollisionManager().enabled = true;
-        status.width = cc.winSize.width;
-        status.height = cc.winSize.height;
-        if(status.height>status.width){
+        let w = cc.winSize.width;
+        let h = cc.winSize.height;
+        let canvas = cc.find("Canvas");
+        if(h>w){
             cc.view.setOrientation(cc.macro.ORIENTATION_LANDSCAPE);
-            let canvas = cc.find("Canvas");
+            //let canvas = cc.find("Canvas");
             canvas.getComponent(cc.Canvas).fitHeight = false;
             canvas.getComponent(cc.Canvas).fitWidth = true;
         }
+        status.width = canvas.width;
+        status.height = canvas.height;
         this.eliteFishData = this.fishJson.json;
         this.skillData = this.skillJson.json;
         this.goldEndPosition = cc.find("goldFrame", cc.director.getScene().getChildByName("Canvas")).position;
@@ -504,24 +507,25 @@ export default class gameCtl extends cc.Component {
      * @param fish 
      */
     initFishPosition(fish: cc.Node): void {
+        debugger;
         switch (this.positionOrder) {
             case 0:
                 fish.x = -status.width / 2;
-                fish.y = 0.8 * (Math.random() - 0.5) * (status.height - 120);
+                fish.y = 0.8 * (Math.random() - 0.5) * (status.height - status.height/6);
                 fish.rotation = 90;
                 fish.scaleX = 1;
                 cc.log(fish);
                 break;
             case 1:
                 fish.x = 0.8 * (Math.random() - 0.5) * status.width;
-                fish.y = status.height / 2 - 40;
+                fish.y = status.height / 2 - status.height/18;
                 fish.rotation = 180;
                 fish.scaleX = 1;
                 cc.log(fish);
                 break;
             case 2:
                 fish.x = status.width / 2;
-                fish.y = 0.8 * (Math.random() - 0.5) * (status.height - 120);
+                fish.y = 0.8 * (Math.random() - 0.5) * (status.height - status.height/6);
                 fish.rotation = -90;
                 fish.scaleX = -1;
                 cc.log(fish);
